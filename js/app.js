@@ -75,18 +75,16 @@ function renderHome() {
           </div>
         </div>
 
-        <div class="hero-stat">
-          <div>
-            <strong>코스</strong>
-            <span>관광코스 기반 맞춤 이동</span>
+        <div class="hero-feature">
+          <div class="hero-feature-image">
+            <img src="${TOURFORU_DATA.courses[0].hero}" alt="이순신 승전길">
+            <span class="hero-feature-badge">경남 추천 코스</span>
           </div>
-          <div>
-            <strong>차량 + 가이드</strong>
-            <span>조건에 맞는 기사·차량 추천</span>
-          </div>
-          <div>
-            <strong>한 번에 결제</strong>
-            <span>예약부터 결제까지 간편하게</span>
+          <div class="hero-feature-body">
+            <span>HISTORY TRAIL</span>
+            <h2>이순신 승전길</h2>
+            <p>승전의 바다를 따라 걷고, 이동과 가이드까지 한 번에 예약하세요.</p>
+            <button onclick="selectCourse('victory-road')">지금 둘러보기 →</button>
           </div>
         </div>
       </div>
@@ -96,7 +94,8 @@ function renderHome() {
       <div class="section-head">
         <div>
           <span class="section-kicker">추천 여행</span>
-          <h2>경남에서 어디로 떠날까요?</h2>
+          <h2>코스를 고르면, 이동이 따라옵니다.</h2>
+          <p class="section-desc">여행지를 먼저 고르고 인원과 짐만 알려주세요. 맞는 차량과 가이드기사를 찾아드립니다.</p>
         </div>
         <span class="section-count">${TOURFORU_DATA.courses.length}개 코스</span>
       </div>
