@@ -1363,3 +1363,35 @@ summary {
     height: 36px;
   }
 }
+
+
+/* TOURFORU Ride home discovery upgrade */
+.hero-feature{overflow:hidden;border:1px solid #e3e9ee;border-radius:24px;background:#fff;box-shadow:0 20px 55px rgba(16,42,67,.10)}
+.hero-feature-image{position:relative;height:230px;overflow:hidden;background:#e9eef2}
+.hero-feature-image img{width:100%;height:100%;object-fit:cover}
+.hero-feature-badge{position:absolute;left:16px;top:16px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.94);color:var(--green);font-size:11px;font-weight:800}
+.hero-feature-body{padding:22px}
+.hero-feature-body>span{color:var(--green);font-size:10px;font-weight:800;letter-spacing:1.3px}
+.hero-feature-body h2{margin:5px 0 7px;font-size:25px;letter-spacing:-.8px}
+.hero-feature-body p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.hero-feature-body button{margin-top:17px;padding:0;border:0;background:transparent;color:var(--navy);font-weight:800;font-size:12px}
+.section-desc{max-width:680px;margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.7}
+.course-card:first-child{grid-column:span 2}
+.course-card:first-child .course-image{height:270px}
+.course-card:first-child .course-body h3{font-size:25px}
+.course-card:first-child .course-body p{min-height:auto}
+@media(max-width:1000px){
+ .hero-feature{display:grid;grid-template-columns:1fr 1fr}
+ .hero-feature-image{height:100%}
+ .course-card:first-child{grid-column:span 2}
+}
+@media(max-width:767px){
+ .hero-feature{display:block;border-radius:20px}
+ .hero-feature-image{height:190px}
+ .hero-feature-body{padding:18px}
+ .hero-feature-body h2{font-size:22px}
+ .course-card:first-child{grid-column:span 1}
+ .course-card:first-child .course-image{height:225px}
+ .course-card:first-child .course-body h3{font-size:22px}
+ .section-desc{font-size:12px}
+}
