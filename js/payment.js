@@ -1,0 +1,1 @@
+window.startPayment=()=>alert("토스페이먼츠 테스트 결제는 다음 단계에서 테스트 키와 서버 승인 API를 연결합니다.");
