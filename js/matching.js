@@ -1,0 +1,1 @@
+window.findRides=(people,bags)=>TOURFORU_DATA.rides.filter(r=>r.capacity>=people&&r.bags>=bags);
