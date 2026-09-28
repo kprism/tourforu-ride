@@ -1,4 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>TOURFORU Ride</title><link rel="stylesheet" href="./css/style.css"></head>
-<body><main id="app"></main><script src="./js/data.js"></script><script src="./js/matching.js"></script><script src="./js/payment.js"></script><script src="./js/app.js"></script></body></html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="관광코스 기반 차량·가이드기사 매칭 서비스 TOURFORU Ride">
+  <title>TOURFORU Ride</title>
+  <link rel="stylesheet" href="css/style.css?v=26092901">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn back-btn hidden" id="backBtn" aria-label="뒤로가기">←</button>
+
+    <button class="brand" id="homeBtn" type="button">
+      <span class="brand-main">TOURFORU</span>
+      <span class="brand-sub">RIDE</span>
+    </button>
+
+    <button class="icon-btn" type="button" aria-label="메뉴">☰</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<nav class="mobile-nav">
+  <button class="active" onclick="goHome()">
+    <span>⌂</span>
+    <small>홈</small>
+  </button>
+  <button onclick="showComingSoon('예약내역')">
+    <span>▣</span>
+    <small>예약</small>
+  </button>
+  <button onclick="showComingSoon('찜')">
+    <span>♡</span>
+    <small>찜</small>
+  </button>
+  <button onclick="showComingSoon('마이페이지')">
+    <span>○</span>
+    <small>MY</small>
+  </button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/data.js?v=26092901"></script>
+<script src="js/matching.js?v=26092901"></script>
+<script src="js/payment.js?v=26092901"></script>
+<script src="js/app.js?v=26092901"></script>
+</body>
+</html>

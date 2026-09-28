@@ -1,1 +1,11 @@
-window.startPayment=()=>alert("토스페이먼츠 테스트 결제는 다음 단계에서 테스트 키와 서버 승인 API를 연결합니다.");
+window.TourPayment = {
+  start(reservation) {
+    sessionStorage.setItem("tourforu_reservation", JSON.stringify(reservation));
+
+    showToast("토스페이먼츠 테스트 결제 연동 준비가 완료되었습니다.");
+
+    setTimeout(() => {
+      showPaymentDemo(reservation);
+    }, 450);
+  }
+};
