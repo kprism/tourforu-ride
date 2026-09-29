@@ -321,7 +321,7 @@ function renderRoute() {
           <span class="difficulty">${r.difficulty}</span>
         </div>
 
-        <div class="timeline">
+        <div id="customerRouteMap" class="customer-route-map"></div>\n\n        <div class="timeline">
           ${r.stops.map((stop, i) => `
             <div class="timeline-row">
               <span>${i + 1}</span>
