@@ -6,7 +6,7 @@ window.TOURFORU_DATA = {
       title: "이순신 승전길",
       location: "경상남도",
       description: "충무공 이순신 장군의 승전 현장을 따라 걷는 경남 대표 역사관광 코스",
-      hero: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85",
+      hero: "./assets/victory-road-demo.svg",
       featured: true,
       views: 12840,
       groups: [
