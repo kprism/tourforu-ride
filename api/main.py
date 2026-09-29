@@ -46,7 +46,9 @@ def extract_path(payload):
 
 @app.get("/api/data")
 def get_shared_data():
-    return jsonify(load_shared_data())
+    data = load_shared_data()
+    data["_initialized"] = os.path.exists(DATA_FILE)
+    return jsonify(data)
 
 @app.put("/api/data")
 def put_shared_data():
