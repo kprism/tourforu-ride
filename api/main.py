@@ -3,7 +3,31 @@ import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-app = Flask(__name__)\n\nDATA_FILE = os.path.join(os.path.dirname(__file__), "tourforu_data.json")\n\ndef load_shared_data():\n    if os.path.exists(DATA_FILE):\n        try:\n            import json\n            with open(DATA_FILE, "r", encoding="utf-8") as f:\n                return json.load(f)\n        except Exception:\n            pass\n    return {"courses": [], "rides": []}\n\ndef save_shared_data(data):\n    import json, tempfile\n    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)\n    fd, tmp = tempfile.mkstemp(prefix="tourforu_", suffix=".json", dir=os.path.dirname(DATA_FILE))\n    try:\n        with os.fdopen(fd, "w", encoding="utf-8") as f:\n            json.dump(data, f, ensure_ascii=False)\n        os.replace(tmp, DATA_FILE)\n    finally:\n        if os.path.exists(tmp): os.remove(tmp)\n
+app = Flask(__name__)
+
+DATA_FILE = os.path.join(os.path.dirname(__file__), "tourforu_data.json")
+
+def load_shared_data():
+    if os.path.exists(DATA_FILE):
+        try:
+            import json
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"courses": [], "rides": []}
+
+def save_shared_data(data):
+    import json, tempfile
+    os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix="tourforu_", suffix=".json", dir=os.path.dirname(DATA_FILE))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False)
+        os.replace(tmp, DATA_FILE)
+    finally:
+        if os.path.exists(tmp): os.remove(tmp)
+
 CORS(app, origins=os.getenv("ALLOWED_ORIGINS", "https://kprism.github.io").split(","))
 
 def extract_path(payload):
@@ -20,7 +44,19 @@ def extract_path(payload):
                     path.append(point)
     return path, routes[0].get("summary") or {}
 
-@app.get("/api/data")\ndef get_shared_data():\n    return jsonify(load_shared_data())\n\n@app.put("/api/data")\ndef put_shared_data():\n    body = request.get_json(silent=True) or {}\n    if not isinstance(body.get("courses"), list) or not isinstance(body.get("rides"), list):\n        return jsonify({"error":"courses와 rides 배열이 필요합니다."}), 400\n    save_shared_data({"courses":body["courses"],"rides":body["rides"]})\n    return jsonify({"ok":True,"courses":len(body["courses"]),"rides":len(body["rides"])})\n\n@app.get("/health")
+@app.get("/api/data")
+def get_shared_data():
+    return jsonify(load_shared_data())
+
+@app.put("/api/data")
+def put_shared_data():
+    body = request.get_json(silent=True) or {}
+    if not isinstance(body.get("courses"), list) or not isinstance(body.get("rides"), list):
+        return jsonify({"error":"courses와 rides 배열이 필요합니다."}), 400
+    save_shared_data({"courses":body["courses"],"rides":body["rides"]})
+    return jsonify({"ok":True,"courses":len(body["courses"]),"rides":len(body["rides"])})
+
+@app.get("/health")
 def health():
     return jsonify({"ok": True})
 
