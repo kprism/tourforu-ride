@@ -321,7 +321,9 @@ function renderRoute() {
           <span class="difficulty">${r.difficulty}</span>
         </div>
 
-        <div id="customerRouteMap" class="customer-route-map"></div>\n\n        <div class="timeline">
+        <div id="customerRouteMap" class="customer-route-map"></div>
+
+        <div class="timeline">
           ${r.stops.map((stop, i) => `
             <div class="timeline-row">
               <span>${i + 1}</span>
@@ -334,6 +336,23 @@ function renderRoute() {
       <button class="primary-btn" onclick="openConfirm()">이 코스 선택하기</button>
     </section>
   `;
+  setTimeout(renderCustomerRouteMap, 0);
+}
+
+function renderCustomerRouteMap() {
+  const el=document.getElementById("customerRouteMap"), r=state.route;
+  if(!el||!r) return;
+  const pts=(r.points||[]).filter(p=>p.lat&&p.lng);
+  const saved=(r.path||[]).filter(p=>p.lat&&p.lng);
+  if(!pts.length&&!saved.length){el.innerHTML='<div class="map-empty">관리자에서 코스 지점과 상세 경로를 지정하면 여기에 지도가 표시됩니다.</div>';return}
+  if(!window.kakao?.maps){el.innerHTML='<div class="map-empty">지도를 불러오지 못했습니다.</div>';return}
+  const base=saved.length?saved:pts;
+  const map=new kakao.maps.Map(el,{center:new kakao.maps.LatLng(base[0].lat,base[0].lng),level:8});
+  const bounds=new kakao.maps.LatLngBounds();
+  pts.forEach((p,i)=>{const pos=new kakao.maps.LatLng(p.lat,p.lng);bounds.extend(pos);new kakao.maps.Marker({map,position:pos,title:(i+1)+" "+p.name})});
+  const path=(saved.length?saved:pts).map(p=>{const pos=new kakao.maps.LatLng(p.lat,p.lng);bounds.extend(pos);return pos});
+  if(path.length>1)new kakao.maps.Polyline({map,path,strokeWeight:saved.length?6:3,strokeOpacity:saved.length?.85:.3,strokeStyle:saved.length?"solid":"shortdash"});
+  map.setBounds(bounds);
 }
 
 function openConfirm() {
