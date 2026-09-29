@@ -1,4 +1,4 @@
-window.TOURFORU_TOSS_CLIENT_KEY = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+window.TOURFORU_TOSS_CLIENT_KEY = "test_ck_5OWRapdA8dWAXNxMB74Aro1zEqZK";
 window.TOURFORU_API_BASE = "https://glorious-journey-69p6ww67rx65f55gv-8080.app.github.dev";
 
 window.TourPayment = {
