@@ -726,4 +726,7 @@ function showToast(message) {
   window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
 }
 
-renderHome();
+TourStore.ready()
+  .then(()=>TourPayment.handleRedirect())
+  .then(handled=>{ if(!handled) renderHome(); })
+  .catch(e=>{ console.error(e); renderHome(); });
