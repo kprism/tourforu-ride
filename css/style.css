@@ -1395,4 +1395,5 @@ summary {
  .course-card:first-child .course-body h3{font-size:22px}
  .section-desc{font-size:12px}
 }
-\n.customer-route-map{height:360px;border-radius:18px;overflow:hidden;margin:0 0 22px;background:#eef3f5}.map-empty{height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:#718096;font-size:14px}@media(max-width:700px){.customer-route-map{height:260px;border-radius:14px}}
+
+.customer-route-map{height:360px;border-radius:18px;overflow:hidden;margin:0 0 22px;background:#eef3f5}.map-empty{height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:#718096;font-size:14px}@media(max-width:700px){.customer-route-map{height:260px;border-radius:14px}}
