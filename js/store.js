@@ -1,5 +1,5 @@
 window.TourStore=(()=>{
-  const API=(window.TOURFORU_API_BASE||"https://glorious-journey-69p6ww67rx65f55gv-8080.app.github.dev").replace(/\\/$/,"");
+  const API=(window.TOURFORU_API_BASE||"https://glorious-journey-69p6ww67rx65f55gv-8080.app.github.dev").replace(/\/$/,"");
   const headers={"Content-Type":"application/json","X-Codespaces-Skip-Warning":"true"};
   const clone=v=>JSON.parse(JSON.stringify(v));
   let data={courses:clone(window.TOURFORU_DATA?.courses||[]),rides:clone(window.TOURFORU_DATA?.rides||[])};
