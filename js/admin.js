@@ -98,8 +98,15 @@ function saveRoute(){const {gid,rid}=modalState,g=current().groups.find(x=>x.id=
 function removeRoute(gid,rid){if(!confirm("세부코스를 삭제할까요?"))return;const g=current().groups.find(x=>x.id===gid);g.routes=g.routes.filter(r=>r.id!==rid);persist();render()}
 function move(arr,i,d,rerender=true){const n=i+d;if(n<0||n>=arr.length)return;[arr[i],arr[n]]=[arr[n],arr[i]];persist();if(rerender)render()}
 function moveCourse(i,d){move(courses,i,d)}function moveGroup(i,d){move(current().groups,i,d)}function moveRoute(gid,i,d){move(current().groups.find(g=>g.id===gid).routes,i,d)}
-async function publishLocalData(){if(!confirm("이 PC에 남아 있는 기존 관리자 데이터를 공용 서버 데이터로 저장할까요?
-저장 후 다른 휴대폰과 PC에서도 같은 데이터를 사용합니다."))return;try{const r=await TourStore.seedFromLocal();courses=TourStore.getCourses();rides=TourStore.getRides();selectedId=courses[0]?.id||null;selectedRideId=rides[0]?.id||null;render();toast(`공용 저장 완료 · 관광상품 ${r.courses}개 · 차량 ${r.rides}대`)}catch(e){alert("공용 저장 실패: "+e.message)}}
+async function publishLocalData(){
+  if(!confirm("이 PC에 남아 있는 기존 관리자 데이터를 공용 서버 데이터로 저장할까요?\\n저장 후 다른 휴대폰과 PC에서도 같은 데이터를 사용합니다.")) return;
+  try{
+    const r=await TourStore.seedFromLocal();
+    courses=TourStore.getCourses(); rides=TourStore.getRides();
+    selectedId=courses[0]?.id||null; selectedRideId=rides[0]?.id||null;
+    render(); toast(`공용 저장 완료 · 관광상품 ${r.courses}개 · 차량 ${r.rides}대`);
+  }catch(e){ alert("공용 저장 실패: "+e.message); }
+}
 function toast(msg){const el=document.createElement("div");el.className="admin-toast";el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}
 function soon(name){alert(name+"는 다음 관리모듈에서 연결합니다.")}
 TourStore.ready().then(()=>{courses=TourStore.getCourses();rides=TourStore.getRides();selectedId=courses[0]?.id||null;selectedRideId=rides[0]?.id||null;render();}).catch(e=>{console.error(e);root.innerHTML="<div style=\"padding:40px;font-family:sans-serif\"><h2>관리자 데이터를 불러오지 못했습니다.</h2><p>"+safe(e.message)+"</p></div>"});
