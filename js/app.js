@@ -71,7 +71,7 @@ function renderHome() {
           <div class="search-box">
             <span>⌕</span>
             <input id="courseSearch" type="search" placeholder="어디로 떠나고 싶으세요?">
-            <button onclick="focusSearch()">검색</button>
+            <button onclick="runCourseSearch()">검색</button>
           </div>
         </div>
 
@@ -141,6 +141,10 @@ function renderHome() {
   renderCourseCards(TOURFORU_DATA.courses);
 
   const search = document.getElementById("courseSearch");
+  search.addEventListener("keydown", e => {
+    if (e.key === "Enter") runCourseSearch();
+  });
+
   search.addEventListener("input", e => {
     const q = e.target.value.trim().toLowerCase();
 
@@ -183,8 +187,18 @@ function renderCourseCards(courses) {
   `).join("");
 }
 
-function focusSearch() {
-  document.getElementById("courseSearch")?.focus();
+function runCourseSearch() {
+  const input = document.getElementById("courseSearch");
+  if (!input) return;
+  const q = input.value.trim().toLowerCase();
+  const filtered = TOURFORU_DATA.courses.filter(course =>
+    `${course.title} ${course.location} ${course.category} ${course.description}`
+      .toLowerCase()
+      .includes(q)
+  );
+  renderCourseCards(filtered);
+  document.getElementById("courseSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (!q) showToast("검색어를 입력해주세요.");
 }
 
 function selectCourse(id) {
