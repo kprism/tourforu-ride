@@ -6,7 +6,7 @@ window.TOURFORU_DATA = {
       title: "이순신 승전길",
       location: "경상남도",
       description: "충무공 이순신 장군의 승전 현장을 따라 걷는 경남 대표 역사관광 코스",
-      hero: "./assets/yi-sun-sin-victory-road.jpg",
+      hero: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85",
       featured: true,
       views: 12840,
       groups: [
@@ -25,7 +25,8 @@ window.TOURFORU_DATA = {
               views: 3281,
               difficulty: "보통",
               description: "임진왜란 첫 승전의 현장을 따라 걷는 역사 트래킹 코스",
-              stops: ["옥포항", "옥포대첩기념공원", "기념관", "전망구간"]
+              stops: ["옥포항", "옥포대첩기념공원", "기념관", "전망구간"],
+              points: [{name:"옥포항",lat:34.8928,lng:128.6907},{name:"옥포대첩기념공원",lat:34.8904,lng:128.7136},{name:"기념관",lat:34.8908,lng:128.7146},{name:"전망구간",lat:34.8958,lng:128.7208}]
             },
             {
               id: "hansan",
@@ -37,7 +38,8 @@ window.TOURFORU_DATA = {
               views: 5126,
               difficulty: "보통",
               description: "한산대첩의 역사와 통영 바다를 함께 만나는 대표 코스",
-              stops: ["통영항", "한산도", "제승당", "대첩 전망구간"]
+              stops: ["통영항", "한산도", "제승당", "대첩 전망구간"],
+              points: [{name:"통영항",lat:34.8403,lng:128.4220},{name:"한산도",lat:34.7684,lng:128.4978},{name:"제승당",lat:34.7896,lng:128.4898},{name:"대첩 전망구간",lat:34.8020,lng:128.4650}]
             },
             {
               id: "danghangpo",
@@ -49,7 +51,8 @@ window.TOURFORU_DATA = {
               views: 2149,
               difficulty: "쉬움",
               description: "당항포대첩의 흔적을 따라 가족과 함께 걷기 좋은 코스",
-              stops: ["당항포관광지", "충무공 전승기념관", "해안 산책길"]
+              stops: ["당항포관광지", "충무공 전승기념관", "해안 산책길"],
+              points: [{name:"당항포관광지",lat:35.0550,lng:128.3930},{name:"충무공 전승기념관",lat:35.0540,lng:128.3920},{name:"해안 산책길",lat:35.0500,lng:128.4010}]
             },
             {
               id: "noryang",
@@ -61,7 +64,8 @@ window.TOURFORU_DATA = {
               views: 4672,
               difficulty: "보통",
               description: "이순신 장군의 마지막 바다를 따라가는 역사·추모 트래킹",
-              stops: ["노량", "충렬사", "이순신 순국공원", "남해대교 전망구간"]
+              stops: ["노량", "충렬사", "이순신 순국공원", "남해대교 전망구간"],
+              points: [{name:"노량",lat:34.9450,lng:127.8690},{name:"충렬사",lat:34.9466,lng:127.8675},{name:"이순신 순국공원",lat:34.9427,lng:127.8652},{name:"남해대교 전망구간",lat:34.9422,lng:127.8567}]
             }
           ]
         }
