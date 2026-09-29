@@ -49,7 +49,7 @@ function renderCurrent() {
     case "party": return renderParty();
     case "matches": return renderMatches();
     case "checkout": return renderCheckout();
-    default: return renderHome();
+    default: return TourPayment.handleRedirect().then(handled=>{if(!handled) renderHome();});
   }
 }
 
@@ -650,6 +650,27 @@ function payNow() {
   TourPayment.start(reservation);
 }
 
+function showPaymentSuccess(reservation, payment) {
+  app.innerHTML = `
+    <section class="page-shell section narrow">
+      <div class="success-icon">✓</div>
+      <div class="success-title"><span class="section-kicker">PAYMENT COMPLETE</span><h1>결제가 완료되었습니다.</h1><p>토스페이먼츠 테스트 승인이 정상적으로 완료되었습니다.</p></div>
+      <div class="confirm-card">
+        <div class="confirm-row"><span>주문번호</span><strong>${reservation.orderId}</strong></div>
+        <div class="confirm-row"><span>코스</span><strong>${reservation.course}</strong></div>
+        <div class="confirm-row"><span>차량</span><strong>${reservation.vehicle}</strong></div>
+        <div class="confirm-row"><span>가이드기사</span><strong>${reservation.guide}</strong></div>
+        <div class="confirm-row"><span>결제수단</span><strong>${payment.method || "-"}</strong></div>
+        <div class="confirm-row total"><span>결제금액</span><strong>${money(payment.totalAmount || reservation.amount)}</strong></div>
+      </div>
+      <button class="primary-btn" onclick="goHome()">홈으로 돌아가기</button>
+    </section>`;
+  state.page="payment-complete"; updateBackButton();
+  history.replaceState({}, "", location.pathname);
+}
+function showPaymentFailure(message) {
+  app.innerHTML=`<section class="page-shell section narrow"><div class="success-title"><span class="section-kicker">PAYMENT</span><h1>결제를 완료하지 못했습니다.</h1><p>${message}</p></div><button class="primary-btn" onclick="history.replaceState({},'',location.pathname);goHome()">홈으로 돌아가기</button></section>`;
+}
 function showPaymentDemo(reservation) {
   app.innerHTML = `
     <section class="page-shell section narrow">
