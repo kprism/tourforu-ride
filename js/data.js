@@ -72,27 +72,6 @@ window.TOURFORU_DATA = {
       ]
     },
 
-    {
-      id: "jinju-history",
-      category: "역사 · 문화",
-      title: "진주성 역사여행",
-      location: "진주",
-      description: "진주성과 남강을 중심으로 만나는 경남의 역사문화 여행",
-      hero: "https://images.unsplash.com/photo-1578469645742-46cae010e5d4?auto=format&fit=crop&w=1600&q=80",
-      featured: false,
-      views: 7210
-    },
-
-    {
-      id: "geoje-sea",
-      category: "바다 · 드라이브",
-      title: "거제 바다여행",
-      location: "거제",
-      description: "푸른 남해와 해안도로를 따라 즐기는 거제 드라이브 여행",
-      hero: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
-      featured: false,
-      views: 9320
-    }
   ],
 
   rides: [
