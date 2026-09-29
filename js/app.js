@@ -13,6 +13,8 @@ const state = {
 
 const pageHistory = [];
 
+function getCourses() { return TourStore.getCourses(); }
+
 function money(value) {
   return Number(value).toLocaleString("ko-KR") + "원";
 }
@@ -77,7 +79,7 @@ function renderHome() {
 
         <div class="hero-feature">
           <div class="hero-feature-image">
-            <img src="${TOURFORU_DATA.courses[0].hero}" alt="이순신 승전길">
+            <img src="${getCourses()[0]?.hero || ""}" alt="이순신 승전길">
             <span class="hero-feature-badge">경남 추천 코스</span>
           </div>
           <div class="hero-feature-body">
@@ -97,7 +99,7 @@ function renderHome() {
           <h2>코스를 고르면, 이동이 따라옵니다.</h2>
           <p class="section-desc">여행지를 먼저 고르고 인원과 짐만 알려주세요. 맞는 차량과 가이드기사를 찾아드립니다.</p>
         </div>
-        <span class="section-count">${TOURFORU_DATA.courses.length}개 코스</span>
+        <span class="section-count">${getCourses().length}개 코스</span>
       </div>
 
       <div id="courseGrid" class="course-grid"></div>
@@ -138,7 +140,7 @@ function renderHome() {
     </section>
   `;
 
-  renderCourseCards(TOURFORU_DATA.courses);
+  renderCourseCards(getCourses());
 
   const search = document.getElementById("courseSearch");
   search.addEventListener("keydown", e => {
@@ -148,7 +150,7 @@ function renderHome() {
   search.addEventListener("input", e => {
     const q = e.target.value.trim().toLowerCase();
 
-    const filtered = TOURFORU_DATA.courses.filter(course =>
+    const filtered = getCourses().filter(course =>
       `${course.title} ${course.location} ${course.category} ${course.description}`
         .toLowerCase()
         .includes(q)
@@ -191,7 +193,7 @@ function runCourseSearch() {
   const input = document.getElementById("courseSearch");
   if (!input) return;
   const q = input.value.trim().toLowerCase();
-  const filtered = TOURFORU_DATA.courses.filter(course =>
+  const filtered = getCourses().filter(course =>
     `${course.title} ${course.location} ${course.category} ${course.description}`
       .toLowerCase()
       .includes(q)
@@ -202,7 +204,7 @@ function runCourseSearch() {
 }
 
 function selectCourse(id) {
-  const course = TOURFORU_DATA.courses.find(c => c.id === id);
+  const course = getCourses().find(c => c.id === id);
 
   if (!course?.groups) {
     showComingSoon(course.title);
