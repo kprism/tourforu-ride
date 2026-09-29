@@ -6,13 +6,19 @@ from flask_cors import CORS
 app = Flask(__name__)
 DATA_FILE = os.path.join(os.path.dirname(__file__), "tourforu_data.json")
 
+def empty_data():
+    return {"courses":[],"rides":[],"drivers":[],"reservations":[],"payments":[]}
+
 def load_shared_data():
     if os.path.exists(DATA_FILE):
         try:
             import json
-            with open(DATA_FILE,"r",encoding="utf-8") as f:return json.load(f)
+            with open(DATA_FILE,"r",encoding="utf-8") as f:
+                data=json.load(f)
+            for k,v in empty_data().items():data.setdefault(k,v)
+            return data
         except Exception:pass
-    return {"courses":[],"rides":[],"drivers":[]}
+    return empty_data()
 
 def save_shared_data(data):
     import json,tempfile
@@ -39,14 +45,31 @@ def extract_path(payload):
 
 @app.get("/api/data")
 def get_shared_data():
-    data=load_shared_data();data.setdefault("drivers",[]);data["_initialized"]=os.path.exists(DATA_FILE);return jsonify(data)
+    data=load_shared_data();data["_initialized"]=os.path.exists(DATA_FILE);return jsonify(data)
 
 @app.put("/api/data")
 def put_shared_data():
     body=request.get_json(silent=True) or {}
-    if not isinstance(body.get("courses"),list) or not isinstance(body.get("rides"),list) or not isinstance(body.get("drivers",[]),list):return jsonify({"error":"courses, rides, drivers 배열이 필요합니다."}),400
-    payload={"courses":body["courses"],"rides":body["rides"],"drivers":body.get("drivers",[])};save_shared_data(payload)
-    return jsonify({"ok":True,"courses":len(payload["courses"]),"rides":len(payload["rides"]),"drivers":len(payload["drivers"])})
+    for k in ("courses","rides","drivers","reservations","payments"):
+        if not isinstance(body.get(k,[]),list):return jsonify({"error":f"{k} 배열이 필요합니다."}),400
+    payload={k:body.get(k,[]) for k in empty_data()};save_shared_data(payload)
+    return jsonify({"ok":True,**{k:len(v) for k,v in payload.items()}})
+
+@app.post("/api/reservations")
+def create_reservation():
+    body=request.get_json(silent=True) or {}
+    if not body.get("orderId"):return jsonify({"error":"orderId가 필요합니다."}),400
+    data=load_shared_data();items=data["reservations"]
+    old=next((x for x in items if x.get("orderId")==body["orderId"]),None)
+    if old:old.update(body)
+    else:items.insert(0,body)
+    save_shared_data(data);return jsonify({"ok":True,"reservation":body})
+
+@app.patch("/api/reservations/<order_id>")
+def update_reservation(order_id):
+    body=request.get_json(silent=True) or {};data=load_shared_data();item=next((x for x in data["reservations"] if x.get("orderId")==order_id),None)
+    if not item:return jsonify({"error":"예약을 찾을 수 없습니다."}),404
+    item.update(body);save_shared_data(data);return jsonify({"ok":True,"reservation":item})
 
 @app.get("/health")
 def health():return jsonify({"ok":True})
@@ -74,7 +97,11 @@ def confirm_payment():
     if not payment_key or not order_id or amount is None:return jsonify({"error":"paymentKey, orderId, amount가 필요합니다."}),400
     try:
         import base64
-        auth=base64.b64encode((secret+":").encode()).decode();r=requests.post("https://api.tosspayments.com/v1/payments/confirm",json={"paymentKey":payment_key,"orderId":order_id,"amount":int(amount)},headers={"Authorization":f"Basic {auth}","Content-Type":"application/json"},timeout=15);data=r.json()
-        if not r.ok:return jsonify({"error":data.get("message") or "토스페이먼츠 결제 승인 실패","code":data.get("code")}),r.status_code
-        return jsonify({"paymentKey":data.get("paymentKey"),"orderId":data.get("orderId"),"status":data.get("status"),"method":data.get("method"),"totalAmount":data.get("totalAmount"),"approvedAt":data.get("approvedAt")})
+        auth=base64.b64encode((secret+":").encode()).decode();r=requests.post("https://api.tosspayments.com/v1/payments/confirm",json={"paymentKey":payment_key,"orderId":order_id,"amount":int(amount)},headers={"Authorization":f"Basic {auth}","Content-Type":"application/json"},timeout=15);result=r.json()
+        if not r.ok:return jsonify({"error":result.get("message") or "토스페이먼츠 결제 승인 실패","code":result.get("code")}),r.status_code
+        payment={"paymentKey":result.get("paymentKey"),"orderId":result.get("orderId"),"status":result.get("status"),"method":result.get("method"),"totalAmount":result.get("totalAmount"),"approvedAt":result.get("approvedAt")}
+        data=load_shared_data();data["payments"]=[x for x in data["payments"] if x.get("orderId")!=order_id];data["payments"].insert(0,payment)
+        reservation=next((x for x in data["reservations"] if x.get("orderId")==order_id),None)
+        if reservation:reservation.update({"status":"confirmed","paymentStatus":"paid","paidAt":payment["approvedAt"]})
+        save_shared_data(data);return jsonify(payment)
     except requests.RequestException as e:return jsonify({"error":str(e)}),502
