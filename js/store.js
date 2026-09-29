@@ -11,8 +11,10 @@ window.TourStore=(()=>{
         const r=await fetch(API+"/api/data",{headers:{"X-Codespaces-Skip-Warning":"true"},cache:"no-store"});
         if(!r.ok)throw new Error("HTTP "+r.status);
         const remote=await r.json();
-        if(Array.isArray(remote.courses)&&remote.courses.length)data.courses=remote.courses;
-        if(Array.isArray(remote.rides)&&remote.rides.length)data.rides=remote.rides;
+        if(remote._initialized){
+          if(Array.isArray(remote.courses)) data.courses=remote.courses;
+          if(Array.isArray(remote.rides)) data.rides=remote.rides;
+        }
       }catch(e){console.warn("TOURFORU shared data fallback",e)}
       return data;
     })();
@@ -28,8 +30,8 @@ window.TourStore=(()=>{
   function saveCourses(courses){data.courses=clone(courses);push().then(()=>window.dispatchEvent(new CustomEvent("tourforu:data-changed"))).catch(e=>alert(e.message));return courses}
   function saveRides(rides){data.rides=clone(rides);push().then(()=>window.dispatchEvent(new CustomEvent("tourforu:rides-changed"))).catch(e=>alert(e.message));return rides}
   async function seedFromLocal(){
-    const keys=["tourforuRideCoursesV1","tourforuRideCoursesDemo260929V2","tourforuRideCoursesDemo260929V3"];
-    const rideKeys=["tourforuRideVehiclesV1","tourforuRideVehiclesDemo260929V2"];
+    const keys=["tourforuRideCoursesDemo260929V3","tourforuRideCoursesDemo260929V2","tourforuRideCoursesV1"];
+    const rideKeys=["tourforuRideVehiclesDemo260929V2","tourforuRideVehiclesV1"];
     let courses=null,rides=null;
     for(const k of keys){try{const v=JSON.parse(localStorage.getItem(k));if(Array.isArray(v)&&v.length){courses=v;break}}catch{}}
     for(const k of rideKeys){try{const v=JSON.parse(localStorage.getItem(k));if(Array.isArray(v)&&v.length){rides=v;break}}catch{}}
