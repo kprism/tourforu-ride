@@ -10,8 +10,9 @@ window.TourMatching = {
   },
 
   getMatches(people, bags, route) {
-    return TOURFORU_DATA.rides
-      .filter(ride => ride.capacity >= people && ride.bags >= bags)
+    const vehicles = window.TourStore ? TourStore.getRides() : (TOURFORU_DATA.rides || []);
+    return vehicles
+      .filter(ride => ride.active !== false && ride.capacity >= people && ride.bags >= bags)
       .map(ride => ({
         ...ride,
         totalHours: this.calculateTotalHours(route),
