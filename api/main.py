@@ -58,3 +58,29 @@ def car_route():
         return jsonify({"path": path, "distance": summary.get("distance"), "duration": summary.get("duration"), "source": "kakao-mobility"})
     except (requests.RequestException, ValueError) as e:
         return jsonify({"error": str(e)}), 502
+
+
+@app.post("/api/payments/confirm")
+def confirm_payment():
+    secret = os.getenv("TOSS_SECRET_KEY")
+    if not secret:
+        return jsonify({"error": "TOSS_SECRET_KEY가 설정되지 않았습니다."}), 503
+    body = request.get_json(silent=True) or {}
+    payment_key, order_id, amount = body.get("paymentKey"), body.get("orderId"), body.get("amount")
+    if not payment_key or not order_id or amount is None:
+        return jsonify({"error": "paymentKey, orderId, amount가 필요합니다."}), 400
+    try:
+        import base64
+        auth = base64.b64encode((secret + ":").encode()).decode()
+        r = requests.post(
+            "https://api.tosspayments.com/v1/payments/confirm",
+            json={"paymentKey": payment_key, "orderId": order_id, "amount": int(amount)},
+            headers={"Authorization": f"Basic {auth}", "Content-Type": "application/json"},
+            timeout=15,
+        )
+        data = r.json()
+        if not r.ok:
+            return jsonify({"error": data.get("message") or "토스페이먼츠 결제 승인 실패", "code": data.get("code")}), r.status_code
+        return jsonify({"paymentKey": data.get("paymentKey"), "orderId": data.get("orderId"), "status": data.get("status"), "method": data.get("method"), "totalAmount": data.get("totalAmount"), "approvedAt": data.get("approvedAt")})
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 502
